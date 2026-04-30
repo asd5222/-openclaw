@@ -1,0 +1,19 @@
+{
+  "name": "prompt-reverse-tool",
+  "version": "1.0.0",
+  "description": "AI提示词反推工具 - 从结果反推提示词模板",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

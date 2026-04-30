@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI提示词反推工具 | Prompt Reverse</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🔄</span>
+                    <span>提示词反推工具</span>
+                </h1>
+                <div class="header-info">
+                    <span class="version">v1.0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2 class="hero-title">输入优质内容，反推AI提示词</h2>
+                <p class="hero-subtitle">从你喜欢的文章、代码、文案中提取可复用的提示词模板</p>
+            </section>
+
+            <!-- Main Tool Section -->
+            <section class="tool-section">
+                <div class="tool-card">
+                    <!-- Scene Selection -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">🎯</span>
+                            选择场景
+                        </label>
+                        <select id="sceneSelect" class="form-select">
+                            <option value="general">通用文本</option>
+                            <option value="article">文章写作</option>
+                            <option value="code">代码生成</option>
+                            <option value="social">社交媒体文案</option>
+                            <option value="image">AI绘图提示词</option>
+                        </select>
+                    </div>
+
+                    <!-- Content Input -->
+                    <div class="form-group">
+                        <label class="form-label">
+                            <span class="label-icon">📝</span>
+                            输入内容
+                        </label>
+                        <textarea 
+                            id="contentInput" 
+                            class="form-textarea" 
+                            placeholder="粘贴你想要分析的文章、代码、文案或图片描述..."
+                            rows="10"
+                        ></textarea>
+                        <div class="char-count">
+                            <span id="charCount">0</span> 字符
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button id="reverseBtn" class="btn btn-primary btn-block">
+                        <span class="btn-icon">🔄</span>
+                        <span>开始反推</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Result Section -->
+            <section id="resultSection" class="result-section hidden">
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3 class="result-title">
+                            <span class="result-icon">✨</span>
+                            反推结果
+                        </h3>
+                        <div class="result-actions">
+                            <button id="copyBtn" class="btn btn-small">
+                                <span>📋</span> 复制模板
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Analysis -->
+                    <div id="analysisContent" class="analysis-content"></div>
+
+                    <!-- Prompt Template -->
+                    <div class="template-section">
+                        <h4 class="section-subtitle">
+                            <span>📋</span> 提示词模板
+                        </h4>
+                        <div id="promptTemplate" class="prompt-template"></div>
+                    </div>
+
+                    <!-- Optimization Tips -->
+                    <div class="tips-section">
+                        <h4 class="section-subtitle">
+                            <span>💡</span> 优化建议
+                        </h4>
+                        <ul id="optimizationTips" class="tips-list"></ul>
+                    </div>
+
+                    <!-- Optimize Button -->
+                    <button id="optimizeBtn" class="btn btn-secondary btn-block">
+                        <span class="btn-icon">🚀</span>
+                        <span>优化提示词</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features-section">
+                <h2 class="section-title">💡 使用场景</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <span class="feature-icon">📰</span>
+                        <h3>文章写作</h3>
+                        <p>分析爆款文章结构，生成可复用的写作模板</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">💻</span>
+                        <h3>代码生成</h3>
+                        <p>从优秀代码中提取编程规范和设计模式</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">📱</span>
+                        <h3>社交媒体</h3>
+                        <p>反推小红书、抖音爆款文案的写作技巧</p>
+                    </div>
+                    <div class="feature-card">
+                        <span class="feature-icon">🎨</span>
+                        <h3>AI绘图</h3>
+                        <p>从优质图片描述中提取绘图提示词要素</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 AI提示词反推工具. 帮你快速掌握提示词工程</p>
+        </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

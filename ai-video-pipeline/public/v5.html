@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎬 AI视频工厂 v5.0 - 智能内容生产平台</title>
+  <link rel="stylesheet" href="css/v5-style.css" />
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<header class="header">
+  <div class="header-left">
+    <span class="logo">🏭</span>
+    <div>
+      <h1>AI 视频工厂 <span class="version">v5.0</span></h1>
+      <p class="subtitle">内容策略 → AI生产 → 智能发布 → 数据优化</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="feature-badges">
+      <span class="badge-feature">🧠 内容策略</span>
+      <span class="badge-feature">🎨 AI生成</span>
+      <span class="badge-feature">📱 多平台</span>
+    </div>
+    <div class="status-bar">
+      <span class="dot active" id="systemDot"></span>
+      <span id="systemStatus">系统运行中</span>
+    </div>
+    <button class="btn-primary" onclick="openAutoSettings()">⚙️ 设置</button>
+  </div>
+</header>
+
+<!-- 标签导航 -->
+<nav class="nav-tabs">
+  <div class="nav-tab active" onclick="switchTab('factory')">
+    🏭 视频工厂
+    <span class="tab-desc">AI智能生产</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('strategy')">
+    🎯 内容策略
+    <span class="tab-desc">策略分析</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('trending')">
+    🔥 热点监控
+    <span class="tab-desc">全网热点</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('queue')">
+    📋 生产队列
+    <span class="badge" id="queueBadge">0</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('publish')">
+    🚀 发布中心
+    <span class="tab-desc">智能发布</span>
+  </div>
+  <div class="nav-tab" onclick="switchTab('data')">
+    📊 数据中心
+    <span class="tab-desc">效果分析</span>
+  </div>
+</nav>
+
+<!-- ===== 视频工厂页 ===== -->
+<div id="page-factory" class="page active">
+  <!-- 智能创建区 -->
+  <section class="quick-create">
+    <div class="create-card enhanced">
+      <div class="create-header">
+        <div class="worker-info">
+          <div class="worker-avatar">👨‍💼</div>
+          <div class="worker-details">
+            <h4>AI创意总监</h4>
+            <p>智能分析 + 内容策略 + 自动优化</p>
+          </div>
+        </div>
+        <div class="ai-status">
+          <span class="ai-dot"></span>
+          AI策略引擎就绪
+        </div>
+      </div>
+      
+      <h2>🎯 智能创建视频</h2>
+      <div class="create-form">
+        <div class="form-row">
+          <div class="form-group flex-2">
+            <label>视频主题 <span class="label-tip">AI会自动分析最佳内容策略</span></label>
+            <input type="text" id="quickTopic" placeholder="输入主题，或从热点选择 ↓" />
+          </div>
+          <div class="form-group">
+            <label>目标平台</label>
+            <select id="quickPlatform" onchange="updateStrategyPreview()">
+              <option value="douyin">🎵 抖音</option>
+              <option value="bilibili">📺 B站</option>
+              <option value="xiaohongshu">📕 小红书</option>
+              <option value="shipinhao">💬 视频号</option>
+              <option value="kuaishou">⚡ 快手</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>视频时长</label>
+            <select id="quickDuration">
+              <option value="30s">30秒</option>
+              <option value="60s" selected>60秒</option>
+              <option value="90s">90秒</option>
+              <option value="3min">3分钟</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>内容风格</label>
+            <div class="style-options">
+              <button class="style-btn active" data-style="tech" onclick="selectStyle(this)">
+                <span class="style-icon">💻</span>
+                <span class="style-name">科技风</span>
+                <span class="style-desc">专业、前沿</span>
+              </button>
+              <button class="style-btn" data-style="lifestyle" onclick="selectStyle(this)">
+                <span class="style-icon">☕</span>
+                <span class="style-name">生活风</span>
+                <span class="style-desc">温暖、亲和</span>
+              </button>
+              <button class="style-btn" data-style="knowledge" onclick="selectStyle(this)">
+                <span class="style-icon">📚</span>
+                <span class="style-name">知识风</span>
+                <span class="style-desc">清晰、专业</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 策略预览 -->
+        <div class="strategy-preview" id="strategyPreview">
+          <div class="preview-header">
+            <span>🧠 AI策略分析</span>
+            <span class="preview-score">热度分: <strong>85</strong></span>
+          </div>
+          <div class="preview-content">
+            <div class="preview-item">
+              <span class="preview-label">推荐时长</span>
+              <span class="preview-value">15-60秒</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">最佳发布时间</span>
+              <span class="preview-value">12:00-13:00, 18:00-20:00</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">内容建议</span>
+              <span class="preview-value">前3秒必须有冲击力，每15秒一个信息点</span>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-create enhanced" onclick="createVideo()">
+          <span class="btn-icon">🚀</span>
+          <div class="btn-text">
+            <span class="btn-main">开始AI智能生产</span>
+            <span class="btn-sub">自动分析策略 → 生成文案 → 制作视频</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 今日热点推荐 -->
+  <section class="hot-topics">
+    <div class="section-header">
+      <div class="worker-info">
+        <div class="worker-avatar small">🔍</div>
+        <div class="worker-details">
+          <h4>热点监控员</h4>
+          <p>实时监控全网科技热点趋势</p>
+        </div>
+      </div>
+      <button class="btn-refresh" onclick="refreshHotTopics()">🔄 刷新</button>
+    </div>
+    <div class="topic-chips" id="hotTopics">
+      <div class="topic-chip hot" onclick="useTopic('AI工具实测')">
+        <span class="chip-rank">1</span>
+        <span class="chip-text">AI工具实测</span>
+        <span class="chip-heat">🔥 1250万</span>
+        <span class="chip-trend up">+15%</span>
+      </div>
+      <div class="topic-chip hot" onclick="useTopic('ChatGPT新功能')">
+        <span class="chip-rank">2</span>
+        <span class="chip-text">ChatGPT新功能</span>
+        <span class="chip-heat">🔥 980万</span>
+        <span class="chip-trend up">+8%</span>
+      </div>
+      <div class="topic-chip" onclick="useTopic('手机摄影技巧')">
+        <span class="chip-rank">3</span>
+        <span class="chip-text">手机摄影技巧</span>
+        <span class="chip-heat">756万</span>
+        <span class="chip-trend down">-3%</span>
+      </div>
+      <div class="topic-chip" onclick="useTopic('数码评测')">
+        <span class="chip-rank">4</span>
+        <span class="chip-text">数码评测</span>
+        <span class="chip-heat">623万</span>
+        <span class="chip-trend up">+5%</span>
+      </div>
+      <div class="topic-chip" onclick="useTopic('效率工具推荐')">
+        <span class="chip-rank">5</span>
+        <span class="chip-text">效率工具推荐</span>
+        <span class="chip-heat">567万</span>
+        <span class="chip-trend up">+18%</span>
+      </div>
+      <div class="topic-chip" onclick="useTopic('桌面改造')">
+        <span class="chip-rank">6</span>
+        <span class="chip-text">桌面改造</span>
+        <span class="chip-heat">445万</span>
+        <span class="chip-trend up">+6%</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 正在生产的视频 -->
+  <section class="producing">
+    <div class="section-header" style="margin-bottom: 16px;">
+      <div class="worker-info">
+        <div class="worker-avatar small">🎬</div>
+        <div class="worker-details">
+          <h4>AI视频剪辑师</h4>
+          <p>智能剪辑、AI配音、自动字幕</p>
+        </div>
+      </div>
+      <h3>⚙️ 正在生产</h3>
+    </div>
+    <div class="producing-list" id="producingList">
+      <div class="empty-state">
+        <span class="empty-icon">🎬</span>
+        <p>暂无正在生产的视频</p>
+        <p class="empty-tip">点击上方"开始AI智能生产"创建你的第一个视频</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最近完成 -->
+  <section class="completed">
+    <div class="section-header" style="margin-bottom: 16px;">
+      <div class="worker-info">
+        <div class="worker-avatar small">✅</div>
+        <div class="worker-details">
+          <h4>AI质检员</h4>
+          <p>智能审核视频质量与合规性</p>
+        </div>
+      </div>
+      <h3>✅ 最近完成</h3>
+    </div>
+    <div class="video-grid" id="completedList">
+      <!-- 动态生成 -->
+    </div>
+  </section>
+</div>
+
+<!-- ===== 内容策略页 ===== -->
+<div id="page-strategy" class="page">
+  <div class="strategy-header">
+    <div class="worker-info">
+      <div class="worker-avatar">🎯</div>
+      <div class="worker-details">
+        <h4>内容策略中心</h4>
+        <p>AI策略师 · 智能分析平台规则与内容趋势</p>
+      </div>
+    </div>
+    <div class="strategy-actions">
+      <button class="btn-primary" onclick="analyzeTopic()">🔍 分析话题</button>
+      <button class="btn-secondary" onclick="refreshStrategy()">🔄 刷新策略</button>
+    </div>
+  </div>
+
+  <!-- 平台策略对比 -->
+  <div class="strategy-grid">
+    <div class="strategy-card" data-platform="douyin">
+      <div class="strategy-card-header">
+        <span class="platform-icon">🎵</span>
+        <span class="platform-name">抖音策略</span>
+        <span class="strategy-score">推荐度: 95%</span>
+      </div>
+      <div class="strategy-content">
+        <div class="strategy-section">
+          <h4>📏 内容规格</h4>
+          <p>最佳时长: 15-60秒</p>
+          <p>发布时段: 12:00-13:00, 18:00-20:00, 21:00-23:00</p>
+        </div>
+        <div class="strategy-section">
+          <h4>📝 标题策略</h4>
+          <p>字数限制: 55字以内</p>
+          <p>推荐格式: 数字+结果、疑问句、对比句</p>
+          <p>标签策略: 3-5个标签，2热门+2精准+1品牌</p>
+        </div>
+        <div class="strategy-section">
+          <h4>💡 内容技巧</h4>
+          <ul>
+            <li>前3秒必须有冲击力</li>
+            <li>每15秒设置一个信息点</li>
+            <li>结尾要有明确的行动号召</li>
+            <li>善用emoji增加亲和力</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-card" data-platform="bilibili">
+      <div class="strategy-card-header">
+        <span class="platform-icon">📺</span>
+        <span class="platform-name">B站策略</span>
+        <span class="strategy-score">推荐度: 88%</span>
+      </div>
+      <div class="strategy-content">
+        <div class="strategy-section">
+          <h4>📏 内容规格</h4>
+          <p>最佳时长: 3-10分钟</p>
+          <p>发布时段: 11:00-13:00, 17:00-19:00, 20:00-22:00</p>
+        </div>
+        <div class="strategy-section">
+          <h4>📝 标题策略</h4>
+          <p>字数限制: 80字以内</p>
+          <p>推荐格式: 【分类】+标题、UP主名+内容</p>
+          <p>标签策略: 5-10个标签，3分区+4内容+3活动</p>
+        </div>
+        <div class="strategy-section">
+          <h4>💡 内容技巧</h4>
+          <ul>
+            <li>开头介绍视频大纲</li>
+            <li>中间详细展开讲解</li>
+            <li>结尾总结并预告下期</li>
+            <li>善用时间戳方便导航</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="strategy-card" data-platform="xiaohongshu">
+      <div class="strategy-card-header">
+        <span class="platform-icon">📕</span>
+        <span class="platform-name">小红书策略</span>
+        <span class="strategy-score">推荐度: 82%</span>
+      </div>
+      <div class="strategy-content">
+        <div class="strategy-section">
+          <h4>📏 内容规格</h4>
+          <p>最佳时长: 30-90秒</p>
+          <p>发布时段: 07:00-09:00, 12:00-14:00, 20:00-22:00</p>
+        </div>
+        <div class="strategy-section">
+          <h4>📝 标题策略</h4>
+          <p>字数限制: 20字以内</p>
+          <p>推荐格式: emoji+关键词、攻略/测评/分享</p>
+          <p>标签策略: 5-10个标签，3大类+4细分+3场景</p>
+        </div>
+        <div class="strategy-section">
+          <h4>💡 内容技巧</h4>
+          <ul>
+            <li>封面要精美吸睛</li>
+            <li>内容要实用可收藏</li>
+            <li>多用emoji增加亲和力</li>
+            <li>评论区互动很重要</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 风格模板 -->
+  <section class="style-templates">
+    <h3>🎨 视频风格模板</h3>
+    <div class="template-grid">
+      <div class="template-card active" data-style="tech">
+        <div class="template-preview" style="background: linear-gradient(135deg, #00D4FF, #0066FF);">
+          <span class="template-icon">💻</span>
+        </div>
+        <div class="template-info">
+          <h4>科技风</h4>
+          <p>专业、前沿、科技感</p>
+          <div class="template-colors">
+            <span style="background: #00D4FF;"></span>
+            <span style="background: #0066FF;"></span>
+            <span style="background: #FFFFFF;"></span>
+          </div>
+        </div>
+      </div>
+      <div class="template-card" data-style="lifestyle">
+        <div class="template-preview" style="background: linear-gradient(135deg, #FFB800, #FF6B6B);">
+          <span class="template-icon">☕</span>
+        </div>
+        <div class="template-info">
+          <h4>生活风</h4>
+          <p>温暖、亲和、生活化</p>
+          <div class="template-colors">
+            <span style="background: #FFB800;"></span>
+            <span style="background: #FF6B6B;"></span>
+            <span style="background: #FFFFFF;"></span>
+          </div>
+        </div>
+      </div>
+      <div class="template-card" data-style="knowledge">
+        <div class="template-preview" style="background: linear-gradient(135deg, #6B4EE6, #00C9A7);">
+          <span class="template-icon">📚</span>
+        </div>
+        <div class="template-info">
+          <h4>知识风</h4>
+          <p>清晰、专业、教育感</p>
+          <div class="template-colors">
+            <span style="background: #6B4EE6;"></span>
+            <span style="background: #00C9A7;"></span>
+            <span style="background: #FFFFFF;"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== 热点监控页 ===== -->
+<div id="page-trending" class="page">
+  <div class="trending-header">
+    <div class="worker-info">
+      <div class="worker-avatar">🔍</div>
+      <div class="worker-details">
+        <h4>热点监控中心</h4>
+        <p>情报分析员 · 实时追踪全网科技热点</p>
+      </div>
+    </div>
+    <div class="trending-actions">
+      <button class="btn-primary" onclick="refreshAllTrending()">🔄 刷新全部</button>
+      <button class="btn-secondary" onclick="openMonitorSettings()">⚙️ 监控设置</button>
+    </div>
+  </div>
+  
+  <div class="trending-grid">
+    <!-- 抖音 -->
+    <div class="trending-card">
+      <div class="trending-card-header">
+        <span class="platform-icon douyin">🎵</span>
+        <span class="platform-name">抖音热点</span>
+        <span class="update-time" id="update-douyin">更新于 10分钟前</span>
+      </div>
+      <div class="trending-list" id="trending-douyin">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+
+    <!-- B站 -->
+    <div class="trending-card">
+      <div class="trending-card-header">
+        <span class="platform-icon bilibili">📺</span>
+        <span class="platform-name">B站热门</span>
+        <span class="update-time" id="update-bilibili">更新于 15分钟前</span>
+      </div>
+      <div class="trending-list" id="trending-bilibili">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+
+    <!-- 小红书 -->
+    <div class="trending-card">
+      <div class="trending-card-header">
+        <span class="platform-icon xiaohongshu">📕</span>
+        <span class="platform-name">小红书趋势</span>
+        <span class="update-time" id="update-xiaohongshu">更新于 8分钟前</span>
+      </div>
+      <div class="trending-list" id="trending-xiaohongshu">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+
+    <!-- 微博 -->
+    <div class="trending-card">
+      <div class="trending-card-header">
+        <span class="platform-icon weibo">👁️</span>
+        <span class="platform-name">微博热搜</span>
+        <span class="update-time" id="update-weibo">更新于 5分钟前</span>
+      </div>
+      <div class="trending-list" id="trending-weibo">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 自动选题推荐 -->
+  <section class="ai-recommend">
+    <div class="section-header" style="margin-bottom: 16px;">
+      <div class="worker-info">
+        <div class="worker-avatar small">🤖</div>
+        <div class="worker-details">
+          <h4>AI策略师</h4>
+          <p>智能分析热点，推荐最佳选题</p>
+        </div>
+      </div>
+      <h3>🤖 AI选题推荐（基于热点+账号定位+内容策略）</h3>
+    </div>
+    <div class="recommend-list" id="aiRecommendList">
+      <!-- 动态生成 -->
+    </div>
+  </section>
+</div>
+
+<!-- ===== 生产队列页 ===== -->
+<div id="page-queue" class="page">
+  <div class="queue-header">
+    <div class="worker-info">
+      <div class="worker-avatar">📋</div>
+      <div class="worker-details">
+        <h4>调度员</h4>
+        <p>管理视频生产队列，优化任务调度</p>
+      </div>
+    </div>
+    <div class="queue-stats">
+      <span class="stat-item">
+        <span class="stat-dot pending"></span>
+        等待中: <strong id="statPending">0</strong>
+      </span>
+      <span class="stat-item">
+        <span class="stat-dot processing"></span>
+        生产中: <strong id="statProcessing">0</strong>
+      </span>
+      <span class="stat-item">
+        <span class="stat-dot completed"></span>
+        已完成: <strong id="statCompleted">0</strong>
+      </span>
+    </div>
+  </div>
+  
+  <div class="queue-list" id="queueList">
+    <!-- 动态生成 -->
+  </div>
+</div>
+
+<!-- ===== 发布中心页 ===== -->
+<div id="page-publish" class="page">
+  <div class="publish-header">
+    <div class="worker-info">
+      <div class="worker-avatar">🚀</div>
+      <div class="worker-details">
+        <h4>发布专员</h4>
+        <p>智能内容优化，一键发布到多平台</p>
+      </div>
+    </div>
+    <div class="publish-actions">
+      <button class="btn-primary" onclick="batchPublish()">📤 批量发布</button>
+      <button class="btn-secondary" onclick="openScheduleModal()">⏰ 定时发布</button>
+    </div>
+  </div>
+
+  <!-- 平台状态 -->
+  <div class="platform-status-bar">
+    <div class="platform-status-item" data-platform="douyin">
+      <span class="status-icon">🎵</span>
+      <span class="status-name">抖音</span>
+      <span class="status-dot online"></span>
+    </div>
+    <div class="platform-status-item" data-platform="bilibili">
+      <span class="status-icon">📺</span>
+      <span class="status-name">B站</span>
+      <span class="status-dot online"></span>
+    </div>
+    <div class="platform-status-item" data-platform="xiaohongshu">
+      <span class="status-icon">📕</span>
+      <span class="status-name">小红书</span>
+      <span class="status-dot offline"></span>
+    </div>
+  </div>
+
+  <!-- 待发布视频 -->
+  <section class="pending-publish">
+    <h3>📦 待发布视频 <span class="section-tip">AI已自动优化各平台内容</span></h3>
+    <div class="publish-grid" id="pendingPublishList">
+      <div class="empty-state">
+        <span class="empty-icon">📦</span>
+        <p>暂无待发布视频</p>
+        <p class="empty-tip">视频生产完成后会出现在这里</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 已发布/定时发布 -->
+  <section class="published">
+    <h3>📤 发布记录</h3>
+    <div class="publish-history" id="publishHistory">
+      <!-- 动态生成 -->
+    </div>
+  </section>
+</div>
+
+<!-- ===== 数据中心页 ===== -->
+<div id="page-data" class="page">
+  <div class="data-header">
+    <div class="worker-info">
+      <div class="worker-avatar">📊</div>
+      <div class="worker-details">
+        <h4>数据分析师</h4>
+        <p>分析视频效果，输出数据报告</p>
+      </div>
+    </div>
+    <div class="date-range">
+      <button class="range-btn active">近7天</button>
+      <button class="range-btn">近30天</button>
+      <button class="range-btn">本月</button>
+    </div>
+  </div>
+
+  <!-- 核心指标 -->
+  <div class="data-cards">
+    <div class="data-card">
+      <div class="data-icon">🎬</div>
+      <div class="data-value" id="dataTotalVideos">0</div>
+      <div class="data-label">累计生产视频</div>
+      <div class="data-trend up">↑ <span id="dataWeekVideos">0</span> 本周</div>
+    </div>
+    <div class="data-card">
+      <div class="data-icon">⏱️</div>
+      <div class="data-value" id="dataSavedTime">0</div>
+      <div class="data-label">节省人工时间(小时)</div>
+      <div class="data-trend up">每条节省 4小时</div>
+    </div>
+    <div class="data-card">
+      <div class="data-icon">🚀</div>
+      <div class="data-value" id="dataPublished">0</div>
+      <div class="data-label">已发布视频</div>
+      <div class="data-trend">跨 <span id="dataPlatforms">0</span> 个平台</div>
+    </div>
+    <div class="data-card">
+      <div class="data-icon">📈</div>
+      <div class="data-value" id="dataSuccessRate">0%</div>
+      <div class="data-label">发布成功率</div>
+      <div class="data-trend up">平均发布耗时 <span id="dataAvgTime">0</span>秒</div>
+    </div>
+  </div>
+
+  <!-- 平台数据分布 -->
+  <div class="data-row">
+    <div class="data-panel">
+      <h3>平台发布分布</h3>
+      <div class="platform-chart" id="platformChart">
+        <!-- 动态生成 -->
+      </div>
+    </div>
+    <div class="data-panel">
+      <h3>生产趋势</h3>
+      <div class="trend-chart" id="trendChart">
+        <div class="chart-placeholder">
+          <span>📊</span>
+          <p>近7天生产趋势</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 热门选题排行 -->
+  <section class="top-topics">
+    <h3>🏆 热门选题排行</h3>
+    <div class="top-list" id="topTopicsList">
+      <!-- 动态生成 -->
+    </div>
+  </section>
+</div>
+
+<!-- ===== 模态框 ===== -->
+
+<!-- 视频详情模态框 -->
+<div class="modal-overlay hidden" id="videoModal">
+  <div class="modal-box modal-large">
+    <div class="modal-header">
+      <h3>🎬 视频详情</h3>
+      <button class="modal-close" onclick="closeModal('videoModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="video-preview">
+        <video id="modalVideo" controls poster=""></video>
+      </div>
+      <div class="video-info">
+        <div class="info-group">
+          <label>标题</label>
+          <input type="text" id="modalTitle" class="info-input" />
+          <span class="input-tip">已按平台规则优化</span>
+        </div>
+        <div class="info-group">
+          <label>描述</label>
+          <textarea id="modalDesc" class="info-textarea" rows="4"></textarea>
+          <span class="input-tip">AI已自动生成平台适配描述</span>
+        </div>
+        <div class="info-group">
+          <label>标签</label>
+          <input type="text" id="modalTags" class="info-input" placeholder="#标签1 #标签2" />
+          <span class="input-tip">已智能推荐热门标签</span>
+        </div>
+        <div class="info-group">
+          <label>内容策略</label>
+          <div class="strategy-tags">
+            <span class="strategy-tag">最佳发布时间: 18:00-20:00</span>
+            <span class="strategy-tag">热度分: 85</span>
+            <span class="strategy-tag">预估互动率: 高</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('videoModal')">关闭</button>
+      <button class="btn-primary" onclick="addToPublishQueue()">🚀 加入发布队列</button>
+      <button class="btn-success" onclick="downloadVideo()">⬇️ 下载视频</button>
+    </div>
+  </div>
+</div>
+
+<!-- 自动设置模态框 -->
+<div class="modal-overlay hidden" id="settingsModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>⚙️ 自动任务设置</h3>
+      <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="setting-group">
+        <label class="setting-label">
+          <input type="checkbox" id="autoTrending" checked />
+          <span>自动监控热点</span>
+        </label>
+        <p class="setting-desc">每小时自动抓取各平台热点数据</p>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">
+          <input type="checkbox" id="autoCreate" />
+          <span>自动创建视频</span>
+        </label>
+        <p class="setting-desc">发现高热度话题时自动创建视频任务</p>
+      </div>
+      <div class="setting-group">
+        <label class="setting-label">
+          <input type="checkbox" id="autoPublish" />
+          <span>自动发布（需确认）</span>
+        </label>
+        <p class="setting-desc">视频生成后推送到发布队列，等待你一键确认</p>
+      </div>
+      <div class="setting-group">
+        <label>每日生产上限</label>
+        <input type="number" id="dailyLimit" value="10" min="1" max="50" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('settingsModal')">取消</button>
+      <button class="btn-primary" onclick="saveSettings()">💾 保存设置</button>
+    </div>
+  </div>
+</div>
+
+<!-- 发布确认模态框 -->
+<div class="modal-overlay hidden" id="publishConfirmModal">
+  <div class="modal-box modal-large">
+    <div class="modal-header">
+      <h3>🚀 确认发布</h3>
+      <button class="modal-close" onclick="closeModal('publishConfirmModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="publish-preview">
+        <video id="publishVideoPreview" controls></video>
+      </div>
+      <div class="publish-form">
+        <div class="form-group">
+          <label>发布平台 <span class="label-tip">AI已自动优化各平台内容</span></label>
+          <div class="platform-select enhanced">
+            <div class="platform-option" data-platform="douyin">
+              <input type="checkbox" checked value="douyin" />
+              <span class="platform-icon">🎵</span>
+              <div class="platform-info">
+                <span class="platform-name">抖音</span>
+                <span class="platform-optimized">✓ 标题已优化</span>
+              </div>
+            </div>
+            <div class="platform-option" data-platform="bilibili">
+              <input type="checkbox" value="bilibili" />
+              <span class="platform-icon">📺</span>
+              <div class="platform-info">
+                <span class="platform-name">B站</span>
+                <span class="platform-optimized">✓ 标签已优化</span>
+              </div>
+            </div>
+            <div class="platform-option" data-platform="xiaohongshu">
+              <input type="checkbox" value="xiaohongshu" />
+              <span class="platform-icon">📕</span>
+              <div class="platform-info">
+                <span class="platform-name">小红书</span>
+                <span class="platform-optimized">✓ 描述已优化</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>发布时间</label>
+          <select id="publishTimeType" onchange="toggleScheduleTime()">
+            <option value="now">立即发布</option>
+            <option value="schedule">定时发布</option>
+            <option value="ai">AI推荐时间</option>
+          </select>
+        </div>
+        <div class="form-group hidden" id="scheduleTimeGroup">
+          <label>定时时间</label>
+          <input type="datetime-local" id="scheduleTime" />
+        </div>
+        <div class="form-group" id="aiRecommendTime">
+          <label>AI推荐时间</label>
+          <div class="ai-time-recommend">
+            <span class="recommend-badge">最佳</span>
+            <span class="recommend-time">今天 18:30</span>
+            <span class="recommend-reason">基于你的粉丝活跃时间分析</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('publishConfirmModal')">取消</button>
+      <button class="btn-primary" onclick="confirmPublish()">✅ 确认发布</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/v5-app.js"></script>
+</body>
+</html>

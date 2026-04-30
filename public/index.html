@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI每日资讯 | AI News Daily</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <h1 class="logo">
+                    <span class="logo-icon">🤖</span>
+                    <span>AI每日资讯</span>
+                </h1>
+                <nav class="nav">
+                    <a href="#news" class="nav-link">新闻</a>
+                    <a href="#videos" class="nav-link">视频</a>
+                    <a href="#about" class="nav-link">关于</a>
+                </nav>
+                <div class="header-info">
+                    <span id="lastUpdate" class="update-time"></span>
+                    <button id="refreshBtn" class="refresh-btn">
+                        <span class="btn-icon">🔄</span>
+                        <span>刷新</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h2 class="hero-title">探索AI世界的最新动态</h2>
+                <p class="hero-subtitle">每天为您精选人工智能领域的最新新闻、突破性研究和视频内容</p>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span id="newsCount" class="stat-number">0</span>
+                        <span class="stat-label">新闻</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="videoCount" class="stat-number">0</span>
+                        <span class="stat-label">视频</span>
+                    </div>
+                    <div class="stat-item">
+                        <span id="sourceCount" class="stat-number">0</span>
+                        <span class="stat-label">来源</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- News Section -->
+            <section id="news" class="news-section">
+                <div class="section-header">
+                    <h2 class="section-title">📰 最新AI新闻</h2>
+                    <div class="section-actions">
+                        <select id="newsFilter" class="filter-select">
+                            <option value="all">全部</option>
+                            <option value="AIbase">AIbase</option>
+                            <option value="O'Reilly AI Radar">O'Reilly</option>
+                            <option value="Artificial Intelligence News">AI News</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="newsGrid" class="news-grid">
+                    <div class="loading">加载中...</div>
+                </div>
+            </section>
+
+            <!-- Videos Section -->
+            <section id="videos" class="videos-section">
+                <div class="section-header">
+                    <h2 class="section-title">🎬 AI相关视频</h2>
+                    <div class="section-actions">
+                        <select id="videoFilter" class="filter-select">
+                            <option value="all">全部</option>
+                            <option value="YouTube Search">搜索结果</option>
+                            <option value="Two Minute Papers">Two Minute Papers</option>
+                            <option value="AI Explain">AI Explain</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="videoGrid" class="video-grid">
+                    <div class="loading">加载中...</div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="about-section">
+                <div class="about-card">
+                    <h2 class="section-title">ℹ️ 关于本站</h2>
+                    <p class="about-text">
+                        AI每日资讯是一个聚合平台，为您收集和展示人工智能领域的最新动态。
+                        我们从多个权威来源抓取新闻，并搜索相关的视频内容，帮助您快速了解AI行业的发展。
+                    </p>
+                    <div class="features">
+                        <div class="feature">
+                            <span class="feature-icon">📡</span>
+                            <h3>多源聚合</h3>
+                            <p>从AIbase、O'Reilly等权威来源获取最新资讯</p>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">🎥</span>
+                            <h3>视频推荐</h3>
+                            <p>精选YouTube上的AI相关视频内容</p>
+                        </div>
+                        <div class="feature">
+                            <span class="feature-icon">🔄</span>
+                            <h3>每日更新</h3>
+                            <p>自动更新，确保内容始终最新</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 AI每日资讯. Made with ❤️ for AI enthusiasts</p>
+        </div>
+    </footer>
+
+    <script src="/js/app.js"></script>
+</body>
+</html>

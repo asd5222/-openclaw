@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎬 AI视频生产流水线</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- 顶部导航 -->
+<header class="header">
+  <div class="header-left">
+    <span class="logo">🎬</span>
+    <div>
+      <h1>AI 视频生产流水线</h1>
+      <p class="subtitle">多部门 · 多AI协作 · 全流程自动化</p>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-bar">
+      <span class="dot idle" id="globalDot"></span>
+      <span id="globalStatus">待机中</span>
+    </div>
+    <button class="btn-primary" id="startBtn" onclick="startPipeline()">🚀 开始生产</button>
+    <button class="btn-reset" onclick="resetAll()">🔄 重置</button>
+  </div>
+</header>
+
+<!-- 标签导航 -->
+<nav class="nav-tabs">
+  <div class="nav-tab active" onclick="switchTab('pipeline')">🏭 生产流水线</div>
+  <div class="nav-tab" onclick="switchTab('trending')">🔥 热点监控</div>
+  <div class="nav-tab" onclick="switchTab('staff')">👥 员工管理</div>
+  <div class="nav-tab" onclick="switchTab('account')">📱 账号管理</div>
+  <div class="nav-tab" onclick="switchTab('stats')">📊 数据统计</div>
+</nav>
+
+<!-- ===== 流水线页 ===== -->
+<div id="page-pipeline" class="page active">
+  <!-- 输入区 -->
+  <section class="input-section">
+    <div class="input-card">
+      <h2>📝 输入视频主题</h2>
+      <div class="input-row">
+        <input type="text" id="topicInput" placeholder="例如：如何在30天内养成早起习惯" />
+        <select id="platformSelect">
+          <option value="douyin">抖音</option>
+          <option value="bilibili">B站</option>
+          <option value="xiaohongshu">小红书</option>
+          <option value="youtube">YouTube</option>
+        </select>
+        <select id="durationSelect">
+          <option value="30s">30秒</option>
+          <option value="1min">1分钟</option>
+          <option value="3min">3分钟</option>
+          <option value="5min">5分钟+</option>
+        </select>
+      </div>
+      <div class="style-row">
+        <label>视频风格：</label>
+        <button class="style-btn active" data-style="搞笑幽默">😂 搞笑幽默</button>
+        <button class="style-btn" data-style="干货知识">📚 干货知识</button>
+        <button class="style-btn" data-style="情感共鸣">❤️ 情感共鸣</button>
+        <button class="style-btn" data-style="悬疑反转">🎭 悬疑反转</button>
+        <button class="style-btn" data-style="Vlog记录">🎥 Vlog记录</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 流水线主体 -->
+  <section class="pipeline-section">
+    <h2 class="section-title">🏭 生产流水线</h2>
+
+    <!-- 部门1：策划部 -->
+    <div class="dept-block" id="dept-plan">
+      <div class="dept-header">
+        <span class="dept-icon">🧠</span>
+        <span class="dept-name">策划部</span>
+        <span class="dept-badge" id="badge-plan">2 个岗位</span>
+      </div>
+      <div class="workers-row" id="workers-plan">
+        <!-- 选题研究员 -->
+        <div class="worker-card" id="worker-researcher">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-researcher" onclick="openAvatarModal('researcher')">🔍</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('researcher')">✏️</div>
+              <input type="file" class="avatar-input" id="file-researcher" accept="image/*" onchange="handleAvatarUpload('researcher', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">选题研究员</div>
+              <div class="worker-ai">Perplexity AI</div>
+            </div>
+            <div class="worker-status idle" id="status-researcher">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt" id="prompt-wrap-researcher">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('researcher')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-researcher">分析「{主题}」在{平台}平台的热门方向，列出5个爆款角度，每个角度说明：①目标人群 ②痛点 ③预估完播率理由</div>
+          </div>
+          <div class="worker-output" id="output-researcher"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-researcher"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 内容策划 -->
+        <div class="worker-card" id="worker-director">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-director" onclick="openAvatarModal('director')">🎯</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('director')">✏️</div>
+              <input type="file" class="avatar-input" id="file-director" accept="image/*" onchange="handleAvatarUpload('director', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">内容策划</div>
+              <div class="worker-ai">Claude 3.5</div>
+            </div>
+            <div class="worker-status idle" id="status-director">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('director')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-director">基于以下选题分析，选定最佳角度，输出：①视频核心主题句 ②目标受众画像 ③差异化卖点 ④3个备用标题</div>
+          </div>
+          <div class="worker-output" id="output-director"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-director"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 竞品分析师（新） -->
+        <div class="worker-card" id="worker-competitor">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-competitor" onclick="openAvatarModal('competitor')">🕵️</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('competitor')">✏️</div>
+              <input type="file" class="avatar-input" id="file-competitor" accept="image/*" onchange="handleAvatarUpload('competitor', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">竞品分析师</div>
+              <div class="worker-ai">Perplexity AI</div>
+            </div>
+            <div class="worker-status idle" id="status-competitor">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('competitor')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-competitor">搜索「{主题}」相关的TOP10爆款视频，分析：①共同规律 ②标题套路 ③封面风格 ④内容结构 ⑤评论区高频问题，找出差异化机会点</div>
+          </div>
+          <div class="worker-output" id="output-competitor"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-competitor"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 选题总监（新） -->
+        <div class="worker-card" id="worker-chief">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-chief" onclick="openAvatarModal('chief')">👔</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('chief')">✏️</div>
+              <input type="file" class="avatar-input" id="file-chief" accept="image/*" onchange="handleAvatarUpload('chief', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">选题总监</div>
+              <div class="worker-ai">Claude 3.5</div>
+            </div>
+            <div class="worker-status idle" id="status-chief">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('chief')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-chief">综合选题研究员和竞品分析师的报告，作为选题总监做出最终决策：①选定本期最佳选题 ②给出选题理由（数据支撑） ③预估爆款概率 ④确定视频核心卖点 ⑤指定执行优先级</div>
+          </div>
+          <div class="worker-output" id="output-chief"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-chief"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ 策划完成，进入文案部</div>
+
+    <!-- 部门2：文案部 -->
+    <div class="dept-block" id="dept-copy">
+      <div class="dept-header">
+        <span class="dept-icon">✍️</span>
+        <span class="dept-name">文案部</span>
+        <span class="dept-badge" id="badge-copy">3 个岗位</span>
+      </div>
+      <div class="workers-row" id="workers-copy">
+        <!-- 钩子文案师 -->
+        <div class="worker-card" id="worker-hook">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-hook" onclick="openAvatarModal('hook')">⚡</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('hook')">✏️</div>
+              <input type="file" class="avatar-input" id="file-hook" accept="image/*" onchange="handleAvatarUpload('hook', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">钩子文案师</div>
+              <div class="worker-ai">ChatGPT-4o</div>
+            </div>
+            <div class="worker-status idle" id="status-hook">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('hook')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-hook">为「{主题}」写5个开头钩子（前3秒），要求：①有悬念或反常识 ②口语化 ③不超过15字 ④让人想继续看。风格：{风格}</div>
+          </div>
+          <div class="worker-output" id="output-hook"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-hook"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 脚本编剧 -->
+        <div class="worker-card" id="worker-script">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-script" onclick="openAvatarModal('script')">📜</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('script')">✏️</div>
+              <input type="file" class="avatar-input" id="file-script" accept="image/*" onchange="handleAvatarUpload('script', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">脚本编剧</div>
+              <div class="worker-ai">Claude 3.5</div>
+            </div>
+            <div class="worker-status idle" id="status-script">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('script')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-script">写一个{时长}的{平台}视频脚本，主题「{主题}」，风格{风格}。格式：【时间轴】【画面描述】【口播台词】【字幕】，每段不超过15秒，结尾要有CTA</div>
+          </div>
+          <div class="worker-output" id="output-script"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-script"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 标题优化师 -->
+        <div class="worker-card" id="worker-title">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-title" onclick="openAvatarModal('title')">🏷️</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('title')">✏️</div>
+              <input type="file" class="avatar-input" id="file-title" accept="image/*" onchange="handleAvatarUpload('title', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">标题优化师</div>
+              <div class="worker-ai">Kimi</div>
+            </div>
+            <div class="worker-status idle" id="status-title">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('title')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-title">为「{主题}」{平台}视频写10个标题，要求：①含数字或关键词 ②制造好奇或紧迫感 ③符合{平台}算法偏好 ④附上每个标题的推荐理由</div>
+          </div>
+          <div class="worker-output" id="output-title"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-title"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 标题专家（新） -->
+        <div class="worker-card" id="worker-titleexpert">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-titleexpert" onclick="openAvatarModal('titleexpert')">👑</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('titleexpert')">✏️</div>
+              <input type="file" class="avatar-input" id="file-titleexpert" accept="image/*" onchange="handleAvatarUpload('titleexpert', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">标题专家</div>
+              <div class="worker-ai">ChatGPT-4o</div>
+            </div>
+            <div class="worker-status idle" id="status-titleexpert">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('titleexpert')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-titleexpert">作为标题专家，从标题优化师提供的10个标题中选出最佳3个，并进一步优化：①给出最终推荐标题 ②分析为什么这个标题能爆 ③提供AB测试方案 ④给出封面文字配合建议</div>
+          </div>
+          <div class="worker-output" id="output-titleexpert"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-titleexpert"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ 文案完成，进入视觉部</div>
+
+    <!-- 部门3：视觉部 -->
+    <div class="dept-block" id="dept-visual">
+      <div class="dept-header">
+        <span class="dept-icon">🎨</span>
+        <span class="dept-name">视觉部</span>
+        <span class="dept-badge" id="badge-visual">2 个岗位</span>
+      </div>
+      <div class="workers-row" id="workers-visual">
+        <!-- 封面设计师 -->
+        <div class="worker-card" id="worker-cover">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-cover" onclick="openAvatarModal('cover')">🖼️</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('cover')">✏️</div>
+              <input type="file" class="avatar-input" id="file-cover" accept="image/*" onchange="handleAvatarUpload('cover', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">封面设计师</div>
+              <div class="worker-ai">Midjourney</div>
+            </div>
+            <div class="worker-status idle" id="status-cover">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('cover')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-cover">为「{主题}」{平台}视频生成封面提示词，要求：①明亮吸睛的配色 ②人物表情夸张有冲击力 ③简洁构图 ④给出完整的Midjourney英文prompt</div>
+          </div>
+          <div class="worker-output" id="output-cover"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-cover"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 分镜设计师 -->
+        <div class="worker-card" id="worker-storyboard">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-storyboard" onclick="openAvatarModal('storyboard')">🎞️</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('storyboard')">✏️</div>
+              <input type="file" class="avatar-input" id="file-storyboard" accept="image/*" onchange="handleAvatarUpload('storyboard', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">分镜设计师</div>
+              <div class="worker-ai">ChatGPT-4o</div>
+            </div>
+            <div class="worker-status idle" id="status-storyboard">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('storyboard')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-storyboard">根据脚本，为每个段落设计分镜方案：①景别（近景/中景/远景）②运镜方式 ③画面主体 ④参考哪类素材 ⑤转场方式，用表格输出</div>
+          </div>
+          <div class="worker-output" id="output-storyboard"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-storyboard"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ 视觉完成，进入发布部</div>
+
+    <!-- 部门4：发布部 -->
+    <div class="dept-block" id="dept-publish">
+      <div class="dept-header">
+        <span class="dept-icon">📢</span>
+        <span class="dept-name">发布部</span>
+        <span class="dept-badge" id="badge-publish">2 个岗位</span>
+      </div>
+      <div class="workers-row" id="workers-publish">
+        <!-- 简介文案 -->
+        <div class="worker-card" id="worker-desc">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-desc" onclick="openAvatarModal('desc')">📋</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('desc')">✏️</div>
+              <input type="file" class="avatar-input" id="file-desc" accept="image/*" onchange="handleAvatarUpload('desc', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">简介文案</div>
+              <div class="worker-ai">Kimi</div>
+            </div>
+            <div class="worker-status idle" id="status-desc">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('desc')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-desc">为「{主题}」{平台}视频写发布文案：①200字内简介 ②5个热门话题标签 ③@推荐账号 ④最佳发布时间建议 ⑤互动引导语</div>
+          </div>
+          <div class="worker-output" id="output-desc"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-desc"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- SEO优化师 -->
+        <div class="worker-card" id="worker-seo">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-seo" onclick="openAvatarModal('seo')">🔑</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('seo')">✏️</div>
+              <input type="file" class="avatar-input" id="file-seo" accept="image/*" onchange="handleAvatarUpload('seo', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">SEO优化师</div>
+              <div class="worker-ai">Perplexity AI</div>
+            </div>
+            <div class="worker-status idle" id="status-seo">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('seo')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-seo">分析「{主题}」在{平台}的搜索热词，给出：①10个高搜索量关键词 ②3个竞争度低的长尾词 ③标题中应嵌入哪些词 ④最佳发布时段（按数据）</div>
+          </div>
+          <div class="worker-output" id="output-seo"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-seo"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ 发布完成，进入互动运营部</div>
+
+    <!-- 部门5：互动运营部（新增） -->
+    <div class="dept-block" id="dept-interact">
+      <div class="dept-header">
+        <span class="dept-icon">💬</span>
+        <span class="dept-name">互动运营部</span>
+        <span class="dept-badge" id="badge-interact">3 个岗位</span>
+      </div>
+      <div class="workers-row" id="workers-interact">
+        <!-- 评论回复专员 -->
+        <div class="worker-card" id="worker-comment">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-comment" onclick="openAvatarModal('comment')">💬</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('comment')">✏️</div>
+              <input type="file" class="avatar-input" id="file-comment" accept="image/*" onchange="handleAvatarUpload('comment', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">评论回复专员</div>
+              <div class="worker-ai">ChatGPT-4o</div>
+            </div>
+            <div class="worker-status idle" id="status-comment">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('comment')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-comment">为「{主题}」视频准备20条评论区预设回复，涵盖：①正面夸奖 ②质疑反驳 ③深度提问 ④互动引导 ⑤情绪安抚。语气亲切自然，避免官方腔</div>
+          </div>
+          <div class="worker-output" id="output-comment"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-comment"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 粉丝互动策划 -->
+        <div class="worker-card" id="worker-engage">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-engage" onclick="openAvatarModal('engage')">🎁</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('engage')">✏️</div>
+              <input type="file" class="avatar-input" id="file-engage" accept="image/*" onchange="handleAvatarUpload('engage', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">粉丝互动策划</div>
+              <div class="worker-ai">Claude 3.5</div>
+            </div>
+            <div class="worker-status idle" id="status-engage">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('engage')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-engage">围绕「{主题}」设计3个粉丝互动活动：①话题挑战赛（名称+规则+激励） ②有奖问答（5道题） ③连续内容钩子（让粉丝等下期）。每个活动给出完整执行方案</div>
+          </div>
+          <div class="worker-output" id="output-engage"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-engage"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 私信话术顾问 -->
+        <div class="worker-card" id="worker-dm">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-dm" onclick="openAvatarModal('dm')">📩</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('dm')">✏️</div>
+              <input type="file" class="avatar-input" id="file-dm" accept="image/*" onchange="handleAvatarUpload('dm', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">私信话术顾问</div>
+              <div class="worker-ai">Kimi</div>
+            </div>
+            <div class="worker-status idle" id="status-dm">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('dm')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-dm">为「{主题}」账号生成私信自动回复话术库：①新粉迎新语 ②产品咨询引导 ③合作洽谈回应 ④负面情绪化解 ⑤转化成交引导。每类5条，保持真人感</div>
+          </div>
+          <div class="worker-output" id="output-dm"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-dm"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-arrow">↓ 运营完成，进入数据分析部</div>
+
+    <!-- 部门6：数据分析部（新增） -->
+    <div class="dept-block" id="dept-data">
+      <div class="dept-header">
+        <span class="dept-icon">📊</span>
+        <span class="dept-name">数据分析部</span>
+        <span class="dept-badge" id="badge-data">2 个岗位</span>
+      </div>
+      <div class="workers-row" id="workers-data">
+        <!-- 数据解读师 -->
+        <div class="worker-card" id="worker-analyst">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-analyst" onclick="openAvatarModal('analyst')">📈</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('analyst')">✏️</div>
+              <input type="file" class="avatar-input" id="file-analyst" accept="image/*" onchange="handleAvatarUpload('analyst', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">数据解读师</div>
+              <div class="worker-ai">Perplexity AI</div>
+            </div>
+            <div class="worker-status idle" id="status-analyst">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('analyst')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-analyst">分析「{主题}」视频发布72小时内的关键数据指标预测：①完播率基准 ②互动率预期 ③涨粉转化率 ④最佳二次推广时机 ⑤判断是否值得投DOU+的阈值</div>
+          </div>
+          <div class="worker-output" id="output-analyst"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-analyst"><div class="progress-bar"></div></div>
+        </div>
+
+        <!-- 迭代优化师 -->
+        <div class="worker-card" id="worker-optimizer">
+          <div class="worker-header">
+            <div class="worker-avatar-wrap">
+              <div class="worker-avatar" id="avatar-optimizer" onclick="openAvatarModal('optimizer')">🔧</div>
+              <div class="avatar-edit-btn" onclick="openAvatarModal('optimizer')">✏️</div>
+              <input type="file" class="avatar-input" id="file-optimizer" accept="image/*" onchange="handleAvatarUpload('optimizer', this)" />
+            </div>
+            <div class="worker-info">
+              <div class="worker-title">迭代优化师</div>
+              <div class="worker-ai">Claude 3.5</div>
+            </div>
+            <div class="worker-status idle" id="status-optimizer">
+              <span class="status-dot"></span>待机
+            </div>
+          </div>
+          <div class="worker-prompt">
+            <div class="prompt-label">
+              📌 提示词
+              <span class="prompt-edit-btn" onclick="editPrompt('optimizer')">编辑</span>
+            </div>
+            <div class="prompt-text" id="prompt-optimizer">基于「{主题}」视频的表现，输出下一期优化建议：①哪类内容更受欢迎 ②应调整的标题方向 ③时长最优解 ④下3期选题规划 ⑤账号差异化定位强化方案</div>
+          </div>
+          <div class="worker-output" id="output-optimizer"><div class="output-placeholder">等待执行...</div></div>
+          <div class="worker-progress" id="progress-optimizer"><div class="progress-bar"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最终成果汇总 -->
+  <section class="result-section" id="resultSection" style="display:none">
+    <h2>🎉 生产完成！全部成果汇总</h2>
+    <div class="result-grid" id="resultGrid"></div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="exportAll()">📥 导出全部成果</button>
+      <button class="btn-secondary" onclick="copyAll()">📋 一键复制</button>
+    </div>
+  </section>
+</div>
+
+<!-- ===== 员工管理页 ===== -->
+<div id="page-staff" class="page">
+  <div class="staff-page">
+    <h2 class="section-title">👥 员工管理 — 点击头像或编辑按钮可修改</h2>
+    <div class="staff-list" id="staffList"></div>
+  </div>
+</div>
+
+<!-- ===== 账号管理页 ===== -->
+<div id="page-account" class="page">
+  <div class="account-page">
+    <h2 class="section-title">📱 账号管理 — 一站式运营中心</h2>
+    <div class="account-grid">
+      <div class="account-panel">
+        <h3>🌐 平台账号登录</h3>
+        <div class="platform-login-list" id="platformLoginList">
+          <!-- 抖音 -->
+          <div class="platform-login-item">
+            <div class="platform-login-info">
+              <span class="platform-icon-large douyin">🎵</span>
+              <div class="platform-login-detail">
+                <div class="platform-name-large">抖音</div>
+                <div class="login-status" id="loginStatus-douyin">未登录</div>
+              </div>
+            </div>
+            <button class="btn-login" id="btnLogin-douyin" onclick="loginPlatform('douyin')">🔑 登录</button>
+          </div>
+          <!-- B站 -->
+          <div class="platform-login-item">
+            <div class="platform-login-info">
+              <span class="platform-icon-large bilibili">📺</span>
+              <div class="platform-login-detail">
+                <div class="platform-name-large">B站</div>
+                <div class="login-status" id="loginStatus-bilibili">未登录</div>
+              </div>
+            </div>
+            <button class="btn-login" id="btnLogin-bilibili" onclick="loginPlatform('bilibili')">🔑 登录</button>
+          </div>
+          <!-- 小红书 -->
+          <div class="platform-login-item">
+            <div class="platform-login-info">
+              <span class="platform-icon-large xiaohongshu">📕</span>
+              <div class="platform-login-detail">
+                <div class="platform-name-large">小红书</div>
+                <div class="login-status" id="loginStatus-xiaohongshu">未登录</div>
+              </div>
+            </div>
+            <button class="btn-login" id="btnLogin-xiaohongshu" onclick="loginPlatform('xiaohongshu')">🔑 登录</button>
+          </div>
+          <!-- 视频号 -->
+          <div class="platform-login-item">
+            <div class="platform-login-info">
+              <span class="platform-icon-large shipinhao">💬</span>
+              <div class="platform-login-detail">
+                <div class="platform-name-large">视频号</div>
+                <div class="login-status" id="loginStatus-shipinhao">未登录</div>
+              </div>
+            </div>
+            <button class="btn-login" id="btnLogin-shipinhao" onclick="loginPlatform('shipinhao')">🔑 登录</button>
+          </div>
+          <!-- 快手 -->
+          <div class="platform-login-item">
+            <div class="platform-login-info">
+              <span class="platform-icon-large kuaishou">⚡</span>
+              <div class="platform-login-detail">
+                <div class="platform-name-large">快手</div>
+                <div class="login-status" id="loginStatus-kuaishou">未登录</div>
+              </div>
+            </div>
+            <button class="btn-login" id="btnLogin-kuaishou" onclick="loginPlatform('kuaishou')">🔑 登录</button>
+          </div>
+          <!-- YouTube -->
+          <div class="platform-login-item">
+            <div class="platform-login-info">
+              <span class="platform-icon-large youtube">▶️</span>
+              <div class="platform-login-detail">
+                <div class="platform-name-large">YouTube</div>
+                <div class="login-status" id="loginStatus-youtube">未登录</div>
+              </div>
+            </div>
+            <button class="btn-login" id="btnLogin-youtube" onclick="loginPlatform('youtube')">🔑 登录</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="account-panel">
+        <h3>👤 我的账号列表</h3>
+        <div id="accountList">
+          <div class="account-card selected" onclick="selectAccount(this)" data-platform="douyin">
+            <div class="acc-header">
+              <div class="acc-name">主号 - 日常vlog</div>
+              <span class="acc-platform">抖音</span>
+            </div>
+            <div class="acc-stats">
+              <span>👥 粉丝 12.4k</span>
+              <span>🎬 作品 86</span>
+              <span>❤️ 获赞 45.2k</span>
+            </div>
+            <div class="acc-actions">
+              <button class="btn-acc-action" onclick="event.stopPropagation();openPublishModal('douyin')">📤 发布</button>
+              <button class="btn-acc-action" onclick="event.stopPropagation();viewAnalytics('douyin')">📊 数据</button>
+              <button class="btn-acc-action" onclick="event.stopPropagation();manageComments('douyin')">💬 评论</button>
+            </div>
+          </div>
+          <div class="account-card" onclick="selectAccount(this)" data-platform="bilibili">
+            <div class="acc-header">
+              <div class="acc-name">知识分享号</div>
+              <span class="acc-platform">B站</span>
+            </div>
+            <div class="acc-stats">
+              <span>👥 粉丝 3.2k</span>
+              <span>🎬 作品 24</span>
+              <span>▶️ 播放 128k</span>
+            </div>
+            <div class="acc-actions">
+              <button class="btn-acc-action" onclick="event.stopPropagation();openPublishModal('bilibili')">📤 发布</button>
+              <button class="btn-acc-action" onclick="event.stopPropagation();viewAnalytics('bilibili')">📊 数据</button>
+              <button class="btn-acc-action" onclick="event.stopPropagation();manageComments('bilibili')">💬 评论</button>
+            </div>
+          </div>
+          <div class="account-card" onclick="selectAccount(this)" data-platform="xiaohongshu">
+            <div class="acc-header">
+              <div class="acc-name">美食探店号</div>
+              <span class="acc-platform">小红书</span>
+            </div>
+            <div class="acc-stats">
+              <span>👥 粉丝 8.7k</span>
+              <span>📝 笔记 156</span>
+              <span>⭐ 收藏 23.1k</span>
+            </div>
+            <div class="acc-actions">
+              <button class="btn-acc-action" onclick="event.stopPropagation();openPublishModal('xiaohongshu')">📤 发布</button>
+              <button class="btn-acc-action" onclick="event.stopPropagation();viewAnalytics('xiaohongshu')">📊 数据</button>
+              <button class="btn-acc-action" onclick="event.stopPropagation();manageComments('xiaohongshu')">💬 评论</button>
+            </div>
+          </div>
+        </div>
+        <button class="btn-add" onclick="openAddAccountModal()">＋ 添加账号</button>
+      </div>
+
+      <div class="account-panel" style="grid-column: 1 / -1;">
+        <h3>📅 内容日历 — 本周计划</h3>
+        <div id="contentCalendar">
+          <div class="task-list-item"><span class="task-tag done">已完成</span>周一 20:00 · 选题研究 · 早起习惯</div>
+          <div class="task-list-item"><span class="task-tag done">已完成</span>周二 — 脚本撰写完成</div>
+          <div class="task-list-item"><span class="task-tag pending">待发布</span>周四 20:00 · 抖音发布</div>
+          <div class="task-list-item"><span class="task-tag pending">待执行</span>周五 — 下期选题策划</div>
+          <div class="task-list-item"><span class="task-tag pending">待执行</span>周日 — 周报数据复盘</div>
+        </div>
+        <div style="margin-top:16px; display:flex; gap:10px;">
+          <button class="btn-primary" style="flex:1" onclick="generateWeekPlan()">🤖 AI生成下周计划</button>
+          <button class="btn-secondary" style="flex:1" onclick="syncToAllPlatforms()">🔄 同步到全平台</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 热点监控页 ===== -->
+<div id="page-trending" class="page">
+  <div class="trending-page">
+    <div class="trending-header">
+      <h2 class="section-title">🔥 24小时热点监控</h2>
+      <div class="trending-actions">
+        <button class="btn-primary" onclick="refreshTrending()">🔄 刷新热点</button>
+        <button class="btn-secondary" onclick="openAddTopicModal()">➕ 添加监控词</button>
+      </div>
+    </div>
+    
+    <div class="trending-grid">
+      <!-- 抖音热点 -->
+      <div class="trending-card">
+        <div class="trending-card-header">
+          <span class="platform-icon douyin">🎵</span>
+          <span class="platform-name">抖音热点</span>
+          <span class="update-time">更新于 10分钟前</span>
+        </div>
+        <div class="trending-list" id="douyinTrending">
+          <div class="trending-item hot"><span class="rank">1</span><span class="topic">#职场干货分享</span><span class="heat">🔥 982万</span><button class="btn-use" onclick="useTopic('职场干货分享')">使用</button></div>
+          <div class="trending-item hot"><span class="rank">2</span><span class="topic">#30天挑战</span><span class="heat">🔥 756万</span><button class="btn-use" onclick="useTopic('30天挑战')">使用</button></div>
+          <div class="trending-item"><span class="rank">3</span><span class="topic">#早起打卡</span><span class="heat">🔥 623万</span><button class="btn-use" onclick="useTopic('早起打卡')">使用</button></div>
+          <div class="trending-item"><span class="rank">4</span><span class="topic">#效率工具推荐</span><span class="heat">🔥 541万</span><button class="btn-use" onclick="useTopic('效率工具推荐')">使用</button></div>
+          <div class="trending-item"><span class="rank">5</span><span class="topic">#自律生活</span><span class="heat">🔥 489万</span><button class="btn-use" onclick="useTopic('自律生活')">使用</button></div>
+        </div>
+      </div>
+
+      <!-- B站热点 -->
+      <div class="trending-card">
+        <div class="trending-card-header">
+          <span class="platform-icon bilibili">📺</span>
+          <span class="platform-name">B站热门</span>
+          <span class="update-time">更新于 15分钟前</span>
+        </div>
+        <div class="trending-list" id="bilibiliTrending">
+          <div class="trending-item hot"><span class="rank">1</span><span class="topic">【干货】学习方法总结</span><span class="heat">🔥 156万</span><button class="btn-use" onclick="useTopic('学习方法总结')">使用</button></div>
+          <div class="trending-item hot"><span class="rank">2</span><span class="topic">程序员日常</span><span class="heat">🔥 132万</span><button class="btn-use" onclick="useTopic('程序员日常')">使用</button></div>
+          <div class="trending-item"><span class="rank">3</span><span class="topic">读书笔记分享</span><span class="heat">🔥 98万</span><button class="btn-use" onclick="useTopic('读书笔记分享')">使用</button></div>
+          <div class="trending-item"><span class="rank">4</span><span class="topic">时间管理技巧</span><span class="heat">🔥 87万</span><button class="btn-use" onclick="useTopic('时间管理技巧')">使用</button></div>
+          <div class="trending-item"><span class="rank">5</span><span class="topic">新媒体运营</span><span class="heat">🔥 76万</span><button class="btn-use" onclick="useTopic('新媒体运营')">使用</button></div>
+        </div>
+      </div>
+
+      <!-- 小红书热点 -->
+      <div class="trending-card">
+        <div class="trending-card-header">
+          <span class="platform-icon xiaohongshu">📕</span>
+          <span class="platform-name">小红书趋势</span>
+          <span class="update-time">更新于 8分钟前</span>
+        </div>
+        <div class="trending-list" id="xiaohongshuTrending">
+          <div class="trending-item hot"><span class="rank">1</span><span class="topic">#极简生活</span><span class="heat">🔥 234万</span><button class="btn-use" onclick="useTopic('极简生活')">使用</button></div>
+          <div class="trending-item hot"><span class="rank">2</span><span class="topic">#打工人日常</span><span class="heat">🔥 198万</span><button class="btn-use" onclick="useTopic('打工人日常')">使用</button></div>
+          <div class="trending-item"><span class="rank">3</span><span class="topic">#好物分享</span><span class="heat">🔥 167万</span><button class="btn-use" onclick="useTopic('好物分享')">使用</button></div>
+          <div class="trending-item"><span class="rank">4</span><span class="topic">#自我提升</span><span class="heat">🔥 145万</span><button class="btn-use" onclick="useTopic('自我提升')">使用</button></div>
+          <div class="trending-item"><span class="rank">5</span><span class="topic">#职场穿搭</span><span class="heat">🔥 123万</span><button class="btn-use" onclick="useTopic('职场穿搭')">使用</button></div>
+        </div>
+      </div>
+
+      <!-- 微博热点 -->
+      <div class="trending-card">
+        <div class="trending-card-header">
+          <span class="platform-icon weibo">👁️</span>
+          <span class="platform-name">微博热搜</span>
+          <span class="update-time">更新于 5分钟前</span>
+        </div>
+        <div class="trending-list" id="weiboTrending">
+          <div class="trending-item hot"><span class="rank">1</span><span class="topic">#年轻人养生</span><span class="heat">🔥 512万</span><button class="btn-use" onclick="useTopic('年轻人养生')">使用</button></div>
+          <div class="trending-item hot"><span class="rank">2</span><span class="topic">#职场焦虑</span><span class="heat">🔥 478万</span><button class="btn-use" onclick="useTopic('职场焦虑')">使用</button></div>
+          <div class="trending-item"><span class="rank">3</span><span class="topic">#副业赚钱</span><span class="heat">🔥 356万</span><button class="btn-use" onclick="useTopic('副业赚钱')">使用</button></div>
+          <div class="trending-item"><span class="rank">4</span><span class="topic">#情绪管理</span><span class="heat">🔥 298万</span><button class="btn-use" onclick="useTopic('情绪管理')">使用</button></div>
+          <div class="trending-item"><span class="rank">5</span><span class="topic">#读书成长</span><span class="heat">🔥 267万</span><button class="btn-use" onclick="useTopic('读书成长')">使用</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 监控词管理 -->
+    <div class="monitor-section">
+      <h3>📌 我的监控词</h3>
+      <div class="monitor-tags" id="monitorTags">
+        <span class="monitor-tag active">职场提升 <button onclick="removeMonitorTag(this)">×</button></span>
+        <span class="monitor-tag active">效率工具 <button onclick="removeMonitorTag(this)">×</button></span>
+        <span class="monitor-tag active">自我成长 <button onclick="removeMonitorTag(this)">×</button></span>
+        <span class="monitor-tag">习惯养成 <button onclick="removeMonitorTag(this)">×</button></span>
+        <span class="monitor-tag">时间管理 <button onclick="removeMonitorTag(this)">×</button></span>
+      </div>
+      <p class="monitor-tip">💡 当监控词进入任意平台TOP10时，系统将自动推送提醒</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 数据统计页 ===== -->
+<div id="page-stats" class="page">
+  <div class="stats-page">
+    <h2 class="section-title">📊 数据统计</h2>
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-icon">🎬</div>
+        <div class="stat-value" id="stat-videos">0</div>
+        <div class="stat-label">累计生产视频</div>
+        <div class="stat-trend up">↑ 本周 +3</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">⏱️</div>
+        <div class="stat-value" id="stat-time">0<span style="font-size:16px">h</span></div>
+        <div class="stat-label">节省人工时间</div>
+        <div class="stat-trend up">↑ 每条节省 4h</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-value">16</div>
+        <div class="stat-label">AI员工在岗</div>
+        <div class="stat-trend up">↑ 新增选题总监/标题专家</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">📱</div>
+        <div class="stat-value">3</div>
+        <div class="stat-label">管理账号数</div>
+        <div class="stat-trend up">↑ 跨平台运营</div>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stats-panel">
+        <h3>平台内容分布</h3>
+        <div class="platform-bar">
+          <span class="platform-name">抖音</span>
+          <div class="bar-track"><div class="bar-fill" style="width:60%;background:#4a7cfc"></div></div>
+          <span class="bar-pct">60%</span>
+        </div>
+        <div class="platform-bar">
+          <span class="platform-name">B站</span>
+          <div class="bar-track"><div class="bar-fill" style="width:20%;background:#8b5cf6"></div></div>
+          <span class="bar-pct">20%</span>
+        </div>
+        <div class="platform-bar">
+          <span class="platform-name">小红书</span>
+          <div class="bar-track"><div class="bar-fill" style="width:15%;background:#10b981"></div></div>
+          <span class="bar-pct">15%</span>
+        </div>
+        <div class="platform-bar">
+          <span class="platform-name">YouTube</span>
+          <div class="bar-track"><div class="bar-fill" style="width:5%;background:#f59e0b"></div></div>
+          <span class="bar-pct">5%</span>
+        </div>
+      </div>
+      <div class="stats-panel">
+        <h3>最近任务记录</h3>
+        <div id="taskHistory">
+          <div class="task-list-item"><span class="task-tag done">完成</span>「早起习惯」全流程生产 - 今天</div>
+          <div class="task-list-item"><span class="task-tag done">完成</span>「游戏提升」视频策划 - 昨天</div>
+          <div class="task-list-item"><span class="task-tag done">完成</span>「健康饮食」脚本生成 - 3天前</div>
+          <div class="task-list-item"><span class="task-tag pending">待做</span>「效率工具」系列内容规划</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 进度总览悬浮条 -->
+<div class="progress-overview" id="progressOverview" style="display:none">
+  <div class="po-title">📊 流水线进度</div>
+  <div class="po-steps" id="poSteps"></div>
+  <div class="po-bar-wrap"><div class="po-bar" id="poBar"></div></div>
+  <div class="po-percent" id="poPercent">0%</div>
+</div>
+
+<!-- ===== 编辑员工模态框 ===== -->
+<div class="modal-overlay hidden" id="staffModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      ✏️ 编辑员工信息
+      <button class="modal-close" onclick="closeModal('staffModal')">✕</button>
+    </div>
+    <div class="avatar-preview-wrap">
+      <div class="avatar-preview-large" id="modalAvatarPreview">😀</div>
+      <div class="avatar-options">
+        <label class="btn-upload-avatar">
+          📷 上传头像图片
+          <input type="file" id="modalFileInput" accept="image/*" style="display:none" onchange="handleModalAvatarUpload(this)" />
+        </label>
+        <div class="emoji-row" id="emojiRow">
+          <div class="emoji-option" onclick="selectEmoji('😊')">😊</div>
+          <div class="emoji-option" onclick="selectEmoji('🤖')">🤖</div>
+          <div class="emoji-option" onclick="selectEmoji('👩‍💻')">👩‍💻</div>
+          <div class="emoji-option" onclick="selectEmoji('🧑‍🎨')">🧑‍🎨</div>
+          <div class="emoji-option" onclick="selectEmoji('🦊')">🦊</div>
+          <div class="emoji-option" onclick="selectEmoji('🐱')">🐱</div>
+          <div class="emoji-option" onclick="selectEmoji('🦁')">🦁</div>
+          <div class="emoji-option" onclick="selectEmoji('🐼')">🐼</div>
+          <div class="emoji-option" onclick="selectEmoji('🌟')">🌟</div>
+          <div class="emoji-option" onclick="selectEmoji('🔥')">🔥</div>
+          <div class="emoji-option" onclick="selectEmoji('⚡')">⚡</div>
+          <div class="emoji-option" onclick="selectEmoji('💎')">💎</div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">岗位名称</label>
+      <input type="text" class="form-input" id="modalWorkerName" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">使用的AI工具</label>
+      <select class="form-select" id="modalWorkerAI">
+        <option>ChatGPT-4o</option>
+        <option>Claude 3.5</option>
+        <option>Kimi</option>
+        <option>Perplexity AI</option>
+        <option>Midjourney</option>
+        <option>Gemini 1.5 Pro</option>
+        <option>豆包</option>
+        <option>文心一言</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">提示词模板（{主题} {平台} {风格} {时长} 为动态变量）</label>
+      <textarea class="form-textarea" id="modalPromptText" rows="5"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeModal('staffModal')">取消</button>
+      <button class="btn-modal-confirm" onclick="saveStaffEdit()">💾 保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- 添加账号模态框 -->
+<div class="modal-overlay hidden" id="accountModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      📱 添加账号
+      <button class="modal-close" onclick="closeModal('accountModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">账号名称</label>
+      <input type="text" class="form-input" id="accName" placeholder="例：美食探店号" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">平台</label>
+      <select class="form-select" id="accPlatform">
+        <option value="douyin">抖音</option>
+        <option value="bilibili">B站</option>
+        <option value="xiaohongshu">小红书</option>
+        <option value="youtube">YouTube</option>
+        <option value="shipinhao">视频号</option>
+        <option value="kuaishou">快手</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">账号定位（账号核心标签）</label>
+      <input type="text" class="form-input" id="accNiche" placeholder="例：25-35岁职场人，效率提升方法" />
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeModal('accountModal')">取消</button>
+      <button class="btn-modal-confirm" onclick="saveAccount()">✅ 添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- 平台登录模态框 -->
+<div class="modal-overlay hidden" id="loginModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      🔑 登录 <span id="loginPlatformName"></span>
+      <button class="modal-close" onclick="closeModal('loginModal')">✕</button>
+    </div>
+    <div class="login-methods">
+      <div class="login-method active" onclick="switchLoginMethod('qrcode')">📱 扫码登录</div>
+      <div class="login-method" onclick="switchLoginMethod('phone')">📞 手机登录</div>
+      <div class="login-method" onclick="switchLoginMethod('cookie')">🍪 Cookie导入</div>
+    </div>
+    <div class="login-content" id="loginContent">
+      <div class="qrcode-login" id="qrcodeLogin">
+        <div class="qrcode-box">
+          <div class="qrcode-placeholder">🎨</div>
+          <p>请使用 <span id="qrPlatformName">抖音</span> APP 扫码登录</p>
+          <p class="qrcode-tip">扫码后请确认授权，有效期5分钟</p>
+        </div>
+      </div>
+      <div class="phone-login hidden" id="phoneLogin">
+        <div class="form-group">
+          <label class="form-label">手机号</label>
+          <input type="tel" class="form-input" id="loginPhone" placeholder="请输入手机号" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">验证码</label>
+          <div class="verify-row">
+            <input type="text" class="form-input" id="loginCode" placeholder="请输入验证码" />
+            <button class="btn-send-code" onclick="sendVerifyCode()">获取验证码</button>
+          </div>
+        </div>
+      </div>
+      <div class="cookie-login hidden" id="cookieLogin">
+        <div class="form-group">
+          <label class="form-label">Cookie / Token</label>
+          <textarea class="form-textarea" id="loginCookie" rows="4" placeholder="粘贴Cookie或Access Token"></textarea>
+        </div>
+        <p class="cookie-tip">💡 适用于开发者或已有Token的情况</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeModal('loginModal')">取消</button>
+      <button class="btn-modal-confirm" onclick="confirmLogin()">✅ 确认登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- 发布内容模态框 -->
+<div class="modal-overlay hidden" id="publishModal">
+  <div class="modal-box modal-large">
+    <div class="modal-title">
+      📤 发布到 <span id="publishPlatformName">抖音</span>
+      <button class="modal-close" onclick="closeModal('publishModal')">✕</button>
+    </div>
+    <div class="publish-form">
+      <div class="form-group">
+        <label class="form-label">选择视频</label>
+        <div class="video-upload-zone" onclick="document.getElementById('publishVideo').click()">
+          <input type="file" id="publishVideo" accept="video/*" style="display:none" onchange="handleVideoSelect(this)" />
+          <div class="upload-placeholder" id="uploadPlaceholder">
+            <span class="upload-icon">🎬</span>
+            <p>点击或拖拽上传视频</p>
+            <p class="upload-tip">支持 MP4, MOV, AVI 格式，最大 2GB</p>
+          </div>
+          <div class="upload-preview hidden" id="uploadPreview">
+            <video id="previewVideo" controls></video>
+            <button class="btn-remove-video" onclick="event.stopPropagation();removeVideo()">✕</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">标题</label>
+        <input type="text" class="form-input" id="publishTitle" placeholder="输入吸引人的标题" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">描述 / 文案</label>
+        <textarea class="form-textarea" id="publishDesc" rows="4" placeholder="输入视频描述..."></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">话题标签</label>
+          <input type="text" class="form-input" id="publishTags" placeholder="#话题1 #话题2" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">发布时间</label>
+          <select class="form-select" id="publishTime">
+            <option value="now">立即发布</option>
+            <option value="schedule">定时发布</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group hidden" id="scheduleTimeGroup">
+        <label class="form-label">定时时间</label>
+        <input type="datetime-local" class="form-input" id="scheduleTime" />
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeModal('publishModal')">取消</button>
+      <button class="btn-modal-confirm" onclick="confirmPublish()">🚀 确认发布</button>
+    </div>
+  </div>
+</div>
+
+<!-- 添加监控词模态框 -->
+<div class="modal-overlay hidden" id="topicModal">
+  <div class="modal-box">
+    <div class="modal-title">
+      ➕ 添加监控词
+      <button class="modal-close" onclick="closeModal('topicModal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">监控关键词</label>
+      <input type="text" class="form-input" id="monitorTopicInput" placeholder="例如：职场干货、效率工具" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">监控平台（可多选）</label>
+      <div class="platform-checkboxes">
+        <label class="checkbox-label"><input type="checkbox" checked /> 🎵 抖音</label>
+        <label class="checkbox-label"><input type="checkbox" checked /> 📺 B站</label>
+        <label class="checkbox-label"><input type="checkbox" checked /> 📕 小红书</label>
+        <label class="checkbox-label"><input type="checkbox" /> 👁️ 微博</label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal-cancel" onclick="closeModal('topicModal')">取消</button>
+      <button class="btn-modal-confirm" onclick="addMonitorTopic()">✅ 添加监控</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

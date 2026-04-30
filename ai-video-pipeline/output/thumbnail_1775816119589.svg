@@ -1,0 +1,16 @@
+
+      <svg width="1280" height="720" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#0066FF;stop-opacity:1" />
+          </linearGradient>
+        </defs>
+        <rect width="1280" height="720" fill="url(#grad)"/>
+        <rect x="40" y="40" width="1200" height="640" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="4" rx="20"/>
+        <text x="640" y="320" font-family="Arial, sans-serif" font-size="72" font-weight="bold" 
+              fill="white" text-anchor="middle">99%的人不知道科技，看完你就懂了！</text>
+        <text x="640" y="420" font-family="Arial, sans-serif" font-size="36" 
+              fill="rgba(255,255,255,0.9)" text-anchor="middle">AI视频工厂生成</text>
+      </svg>
+    
